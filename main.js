@@ -27,28 +27,39 @@ const getRepos = async function(){
         try{
             let fetchDate = await (await fetch(`https://api.github.com/users/${repoName}/repos`)).json();
             resultsDiv.innerHTML='';
-            fetchDate.forEach(function(repo){
+            if(fetchDate.length==0){
+                let span = document.createElement('span');
+                let textNode = document.createTextNode("No Reps To Show");
+                span.append(textNode);
+                resultsDiv.innerHTML=''
+                resultsDiv.appendChild(span);
+            }else{
+
+                fetchDate.forEach(function(repo){
                 
-                let repoNameJson = repo["name"];
-                let repoStarsJson = repo['stargazers_count'];
-                let repoLinkJson = repo['html_url'];
-                
-                let repoDetailsDivClone = repoDetailsDiv.cloneNode(true);
-                let repoNameDivClone =repoNameDiv.cloneNode(true);
-                let visitLinkClone=visitLink.cloneNode(true);
-                let repoStarsDivClone = repoStarsDiv.cloneNode(true);
-
-                repoNameDivClone.innerHTML=repoNameJson;
-                visitLinkClone.setAttribute('href',repoLinkJson);
-                repoStarsDivClone.innerHTML=`Stars ${repoStarsJson}`;;
-
-                repoDetailsDivClone.appendChild(repoNameDivClone);
-                repoDetailsDivClone.appendChild(visitLinkClone);
-                repoDetailsDivClone.appendChild(repoStarsDivClone);
-
-                resultsDiv.appendChild(repoDetailsDivClone);
-            })
+                    let repoNameJson = repo["name"];
+                    let repoStarsJson = repo['stargazers_count'];
+                    let repoLinkJson = repo['html_url'];
+                    
+                    let repoDetailsDivClone = repoDetailsDiv.cloneNode(true);
+                    let repoNameDivClone =repoNameDiv.cloneNode(true);
+                    let visitLinkClone=visitLink.cloneNode(true);
+                    let repoStarsDivClone = repoStarsDiv.cloneNode(true);
+    
+                    repoNameDivClone.innerHTML=repoNameJson;
+                    visitLinkClone.setAttribute('href',repoLinkJson);
+                    repoStarsDivClone.innerHTML=`Stars ${repoStarsJson}`;;
+    
+                    repoDetailsDivClone.appendChild(repoNameDivClone);
+                    repoDetailsDivClone.appendChild(visitLinkClone);
+                    repoDetailsDivClone.appendChild(repoStarsDivClone);
+    
+                    resultsDiv.appendChild(repoDetailsDivClone);
+                })
+            }
         }catch(error){
+ 
+
             return error;
         }
     }
